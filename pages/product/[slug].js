@@ -14,6 +14,7 @@ import { useRouter } from 'next/router';
 import data from '../../utils/data';
 import Layout from '../../components/Layout';
 import useStyles from '../../utils/styles';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 export default function ProductScreen() {
   const classes = useStyles();
@@ -45,13 +46,14 @@ export default function ProductScreen() {
         <Grid item md={3} xs={12}>
           <List>
             <ListItem>
-              <Typography component="h1">{product.name}</Typography>
+            <Typography component="h1" variant="h1">
+                {product.name}</Typography>
             </ListItem>
             <ListItem>
-              <Typography>Category: {product.category}</Typography>
+              <Typography>Categoria: {product.category}</Typography>
             </ListItem>
             <ListItem>
-              <Typography>Brand: {product.brand}</Typography>
+              <Typography>Marca: {product.brand}</Typography>
             </ListItem>
             <ListItem>
               <Typography>
@@ -59,7 +61,7 @@ export default function ProductScreen() {
               </Typography>
             </ListItem>
             <ListItem>
-              <Typography> Description: {product.description}</Typography>
+              <Typography> Descripción: {product.description}</Typography>
             </ListItem>
           </List>
         </Grid>
@@ -69,7 +71,7 @@ export default function ProductScreen() {
               <ListItem>
                 <Grid container>
                   <Grid item xs={6}>
-                    <Typography>Price</Typography>
+                    <Typography>Precio</Typography>
                   </Grid>
                   <Grid item xs={6}>
                     <Typography>${product.price}</Typography>
@@ -79,7 +81,7 @@ export default function ProductScreen() {
               <ListItem>
                 <Grid container>
                   <Grid item xs={6}>
-                    <Typography>Status</Typography>
+                    <Typography>Estatus</Typography>
                   </Grid>
                   <Grid item xs={6}>
                     <Typography>
@@ -89,8 +91,8 @@ export default function ProductScreen() {
                 </Grid>
               </ListItem>
               <ListItem>
-                <Button fullWidth variant="contained" color="primary">
-                  Add to cart
+                <Button fullWidth variant="contained" color="primary" endIcon={<AddShoppingCartIcon />}>
+                  Agregar al carrito
                 </Button>
               </ListItem>
             </List>

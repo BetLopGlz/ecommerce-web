@@ -1,5 +1,4 @@
-import Head from 'next/head';
-import Image from 'next/image';
+
 import Layout from '../components/Layout';
 import NextLink from 'next/link';
 import {
@@ -10,8 +9,9 @@ import {
   CardContent,
   Typography,
   CardActions,
-  Button,
+  IconButton,
 } from '@mui/material';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import data from '../utils/data';
 
 export default function Home() {
@@ -37,9 +37,9 @@ export default function Home() {
                 </NextLink>
                 <CardActions>
                   <Typography>${product.price}</Typography>
-                  <Button size="small" color="primary">
-                    Añadir al carrito
-                  </Button>
+                  <IconButton color="primary" aria-label="add to shopping cart">
+                    <AddShoppingCartIcon />
+                  </IconButton>
                 </CardActions>
               </Card>
             </Grid>
