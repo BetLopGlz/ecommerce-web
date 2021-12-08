@@ -11,14 +11,17 @@
    ThemeProvider,
    CssBaseline,
    Switch,
+   Badge,
+   IconButton,
  } from '@mui/material';
+ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
  import useStyles from '../utils/styles';
  import { Store } from '../utils/Store';
  import Cookies from 'js-cookie';
  
  export default function Layout({ title, description, children }) {
    const { state, dispatch } = useContext(Store);
-   const { darkMode } = state;
+   const { darkMode,cart } = state;
    const theme = createTheme({
      typography: {
        h1: {
@@ -70,7 +73,25 @@
                  onChange={darkModeChangeHandler}
                ></Switch>
                <NextLink href="/cart" passHref>
-                 <Link>Carrito</Link>
+                 <Link>
+                 
+                 {cart.cartItems.length > 0 ? (
+                    <Badge
+                      color="secondary"
+                      badgeContent={cart.cartItems.length}
+                    >
+                      <IconButton color="primary" aria-label="add to shopping cart" >
+                    <ShoppingCartIcon />
+                  </IconButton>
+                    
+                    </Badge>
+                  ) : (
+                    <IconButton color="primary" aria-label="add to shopping cart" >
+                    <ShoppingCartIcon />
+                  </IconButton>
+                  )}
+                  </Link>
+
                </NextLink>
                <NextLink href="/login" passHref>
                  <Link>Login</Link>
