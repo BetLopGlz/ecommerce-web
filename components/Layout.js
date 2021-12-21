@@ -15,6 +15,7 @@
    IconButton,
  } from '@mui/material';
  import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
  import useStyles from '../utils/styles';
  import { Store } from '../utils/Store';
  import Cookies from 'js-cookie';
@@ -94,14 +95,18 @@
 
                </NextLink>
                <NextLink href="/login" passHref>
-                 <Link>Login</Link>
+               <Link>
+               <IconButton color="primary" aria-label="add to shopping cart" >
+                    <AccountCircleIcon />
+                  </IconButton>
+                  </Link>
                </NextLink>
              </div>
            </Toolbar>
          </AppBar>
          <Container className={classes.main}>{children}</Container>
          <footer className={classes.footer}>
-           <Typography>All rights reserved. web-ecommerce.com.</Typography>
+           <Typography>Esta  es una página creada con fines educativos. Todos los derechos reservados  web-ecommerce.com.</Typography>
          </footer>
        </ThemeProvider>
      </div>
