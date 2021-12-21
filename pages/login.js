@@ -6,38 +6,117 @@ import {
     Button,
     Link,
   } from '@mui/material';
+  import axios from 'axios';
+  import { useRouter } from 'next/router';
   import NextLink from 'next/link';
-  import React from 'react';
+  import React, { useContext, useEffect } from 'react';
   import Layout from '../components/Layout';
+  import { Store } from '../utils/Store';
   import useStyles from '../utils/styles';
+  import Cookies from 'js-cookie';
   import  LoginIcon from '@mui/icons-material/Login';
+  import { Controller, useForm } from 'react-hook-form';
+import { useSnackbar } from 'notistack';
   
   export default function Login() {
+    const {
+      handleSubmit,
+      control,
+      formState: { errors },
+    } = useForm();
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+    const router = useRouter();
+    const { redirect } = router.query; // login?redirect=/shipping
+    const { state, dispatch } = useContext(Store);
+    const { userInfo } = state;
+    useEffect(() => {
+      if (userInfo) {
+        router.push('/');
+      }
+    }, []);
+    
     const classes = useStyles();
+    const submitHandler = async ({ email, password }) => {
+      closeSnackbar();
+      try {
+        const { data } = await axios.post('/api/users/login', {
+          email,
+          password,
+        });
+        dispatch({ type: 'USER_LOGIN', payload: data });
+      Cookies.set('userInfo', JSON.stringify(data));
+      router.push(redirect || '/');
+      } catch (err) {
+        enqueueSnackbar(
+          err.response.data ? err.response.data.message : err.message,
+          { variant: 'error' }
+        );
+      }
+    };
     return (
       <Layout title="Inicio Sesion">
-        <form className={classes.form}>
+        <form  onSubmit={handleSubmit(submitHandler)} className={classes.form}>
           <Typography component="h1" variant="h1">
             Tu cuenta
           </Typography>
           <List>
             <ListItem>
-              <TextField
-                variant="outlined"
-                fullWidth
-                id="email"
-                label="Tu correo Electrónico"
-                inputProps={{ type: 'email' }}
-              ></TextField>
+            <Controller
+              name="email"
+              control={control}
+              defaultValue=""
+              rules={{
+                required: true,
+                pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+              }}
+              render={({ field }) => (
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  id="email"
+                  label="Tu correo electrónico"
+                  inputProps={{ type: 'email' }}
+                  error={Boolean(errors.email)}
+                  helperText={
+                    errors.email
+                      ? errors.email.type === 'pattern'
+                        ? 'El correo no es válido'
+                        : 'Se requiere el campo correo'
+                      : ''
+                  }
+                  {...field}
+                ></TextField>
+              )}
+            ></Controller>
             </ListItem>
             <ListItem>
-              <TextField
-                variant="outlined"
-                fullWidth
-                id="password"
-                label="Tu contraseña"
-                inputProps={{ type: 'password' }}
-              ></TextField>
+            <Controller
+              name="password"
+              control={control}
+              defaultValue=""
+              rules={{
+                required: true,
+                minLength: 6,
+              }}
+              render={({ field }) => (
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  id="password"
+                  label="Tu contraseña"
+                  inputProps={{ type: 'password' }}
+                  error={Boolean(errors.password)}
+                  helperText={
+                    errors.password
+                      ? errors.password.type === 'minLength'
+                        ? 'La contraseña debe tener mas de 5 caracteres'
+                        : 'Se requiere el campo contraseña'
+                      : ''
+                  }
+                  {...field}
+                ></TextField>
+              )}
+            ></Controller>
             </ListItem>
             <ListItem>
               <Button variant="contained" type="submit" fullWidth color="primary" endIcon={<LoginIcon/>}>
@@ -46,7 +125,7 @@ import {
             </ListItem>
             <ListItem>
               ¿No tienes cuenta? &nbsp;
-              <NextLink href="/register" passHref>
+              <NextLink href={`/register?redirect=${redirect || '/'}`} passHref>
                 <Link>Regístrate</Link>
               </NextLink>
             </ListItem>
